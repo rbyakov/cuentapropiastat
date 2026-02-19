@@ -179,18 +179,8 @@
         const v = String(cell ?? "");
         if(looksLikeUrl(v)){
           const href = normalizeUrl(v);
-          const label = href.length > 42 ? (href.slice(0, 39) + "…") : href;
-          // return `<td class="link"><a href="${esc(href)}" target="_blank" rel="noopener">↗ ${esc(label)}</a></td>`;
-          return `
-<td class="link">
-  <a href="${esc(href)}" target="_blank" rel="noopener" title="Открыть Telegram">
-    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
-      <path d="M21.944 2.506a1 1 0 0 0-1.09-.163L2.6 9.21a1 1 0 0 0 .064 1.88l4.89 1.63 1.63 4.89a1 1 0 0 0 1.88.064l6.867-18.255a1 1 0 0 0-.987-1.413zM9.94 13.06l-.94 2.82-.94-2.82 8.23-6.27-6.35 7.27z"/>
-    </svg>
-    <span style="font-size:11px;margin-left:4px;">TG</span>
-  </a>
-</td>
-`;
+          const label = "link";
+          return `<td class="link"><a href="${esc(href)}" target="_blank" rel="noopener">↗ ${esc(label)}</a></td>`;
         }
         // дату/короткие штуки можно подсветить моноширинным
         const isShort = v.length <= 18 && /^[0-9.\-\/ :()]+$/.test(v);
