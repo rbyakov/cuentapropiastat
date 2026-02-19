@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Таблица — GitHub Pages</title>
+
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'IBM Plex Sans',sans-serif;background:#0f1117;color:#e8eaf0;min-height:100vh;padding:28px 22px 60px}
+  header{max-width:1200px;margin:0 auto 18px;border-bottom:1px solid #2a2d3a;padding-bottom:16px}
+  .tag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#4ade80;letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px}
+  h1{font-size:22px;font-weight:600;color:#f0f2f8;line-height:1.2}
+  .sub{margin-top:8px;font-size:13px;color:#7a7f94;font-weight:300;line-height:1.45}
+
+  .controls{max-width:1200px;margin:14px auto 14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .pill{padding:6px 10px;border-radius:999px;border:1px solid #2a2d3a;background:#181b26;color:#9ca3af;font-size:12px;font-family:'IBM Plex Mono',monospace}
+  .search{flex:1;min-width:240px}
+  input[type="search"]{
+    width:100%;padding:10px 12px;border-radius:12px;border:1px solid #2a2d3a;background:#181b26;color:#e8eaf0;
+    outline:none;font-size:13px
+  }
+  input[type="search"]::placeholder{color:#6b7280}
+
+  .table-wrap{max-width:1200px;margin:0 auto;overflow:auto;border-radius:12px;border:1px solid #1e2130}
+  table{width:100%;border-collapse:collapse;font-size:13px;min-width:900px}
+  thead{background:#141722;position:sticky;top:0;z-index:10}
+  th{
+    padding:12px 14px;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#4b5563;
+    text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid #1e2130;white-space:nowrap
+  }
+  td{padding:12px 14px;vertical-align:top;line-height:1.5;color:#cbd5e1;border-bottom:1px solid #181b26}
+  tbody tr:hover{background:#161925}
+  tbody tr:last-child td{border-bottom:none}
+
+  .muted{color:#6b7280;font-family:'IBM Plex Mono',monospace;font-size:12px;white-space:nowrap}
+  .link a{
+    color:#3b82f6;text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:11px;
+    padding:4px 8px;border:1px solid #1d3a5f;border-radius:8px;background:#111827;display:inline-flex;gap:6px;align-items:center
+  }
+  .link a:hover{background:#1e2a3a;border-color:#3b82f6;color:#93c5fd}
+  .loading{max-width:1200px;margin:10px auto 0;color:#9ca3af;font-size:13px}
+  .error{max-width:1200px;margin:14px auto 0;border:1px solid #3a1a1a;background:#141722;padding:12px 14px;border-radius:10px;color:#fca5a5;font-size:13px;line-height:1.5;display:none}
+  .note{max-width:1200px;margin:10px auto 0;color:#6b7280;font-size:12px;font-family:'IBM Plex Mono',monospace}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="tag">▸ github pages · google sheets → js</div>
+  <h1>Данные из Google Sheets</h1>
+  <p class="sub">
+    Страница забирает всю таблицу (все колонки и строки) и показывает здесь.
+    Можно передать свою таблицу параметром URL: <span class="muted">?sheet=...</span>
+  </p>
+</header>
+
+<div class="controls">
+  <div class="search"><input id="q" type="search" placeholder="Поиск по всем ячейкам…" /></div>
+  <div class="pill" id="meta">0 строк</div>
+</div>
+
+<div class="note" id="sourceNote"></div>
+
+<div class="table-wrap">
+  <table>
+    <thead><tr id="thead"></tr></thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<div class="loading" id="loading">Загрузка данных…</div>
+<div class="error" id="errorBox"></div>
+
+<script>
+  // ТВОЯ ТАБЛИЦА (можно заменить или передавать через ?sheet= )
+  const DEFAULT_SHEET_URL =
+    "https://docs.google.com/spreadsheets/d/11q7yn-4c-SDdmsXpAxawZJSjwlnWt2BXsZFtPWxXT50/edit?gid=0#gid=0";
+
+  // --- utils ---------------------------------------------------------------
+
+  function qs(name){
+    const u = new URL(window.location.href);
+    return u.searchParams.get(name);
+  }
+
+  function extractSpreadsheetId(url){
+    const m = String(url).match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+    return m ? m[1] : null;
+  }
+
+  function extractGid(url){
+    const s = String(url);
+    const m = s.match(/[?#&]gid=(\d+)/);
+    return m ? m[1] : "0";
+  }
+
+  // Google Visualization API JSON endpoint
+  function gvizUrl(sheetUrl){
+    const id = extractSpreadsheetId(sheetUrl);
+    const gid = extractGid(sheetUrl);
+    if(!id) return null;
+    return `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?gid=${encodeURIComponent(gid)}&tqx=out:json`;
+  }
+
+  function parseGviz(text){
+    const start = text.indexOf("{");
+    const end = text.lastIndexOf("}");
+    if(start < 0 || end < 0) throw new Error("GViz: ответ не похож на JSON. Проверь Publish to the web.");
+    return JSON.parse(text.slice(start, end + 1));
+  }
+
+  function cellVal(cell){
+    if(!cell) return "";
+    if(cell.f !== undefined && cell.f !== null) return cell.f; // formatted
+    if(cell.v !== undefined && cell.v !== null) return cell.v;
+    return "";
+  }
+
+  function esc(s){
+    return String(s ?? "")
+      .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+  }
+
+  function looksLikeUrl(s){
+    const t = String(s || "").trim();
+    return /^https?:\/\//i.test(t) || /^t\.me\//i.test(t) || /^@/i.test(t);
+  }
+
+  function normalizeUrl(s){
+    let t = String(s || "").trim();
+    if(/^t\.me\//i.test(t)) t = "https://" + t;
+    if(/^@/i.test(t)) t = "https://t.me/" + t.slice(1);
+    return t;
+  }
+
+  // --- render --------------------------------------------------------------
+
+  const theadEl = document.getElementById("thead");
+  const tbodyEl = document.getElementById("tbody");
+  const loadingEl = document.getElementById("loading");
+  const errorEl = document.getElementById("errorBox");
+  const metaEl = document.getElementById("meta");
+  const sourceNote = document.getElementById("sourceNote");
+  const qEl = document.getElementById("q");
+
+  let headers = [];
+  let allRows = []; // array of array strings
+
+  function renderHeaders(cols){
+    theadEl.innerHTML = cols.map(h => `<th>${esc(h || "")}</th>`).join("");
+  }
+
+  function renderRows(rows){
+    tbodyEl.innerHTML = rows.map(r => {
+      const tds = r.map(cell => {
+        const v = String(cell ?? "");
+        if(looksLikeUrl(v)){
+          const href = normalizeUrl(v);
+          const label = href.length > 42 ? (href.slice(0, 39) + "…") : href;
+          return `<td class="link"><a href="${esc(href)}" target="_blank" rel="noopener">↗ ${esc(label)}</a></td>`;
+        }
+        // дату/короткие штуки можно подсветить моноширинным
+        const isShort = v.length <= 18 && /^[0-9.\-\/ :()]+$/.test(v);
+        return `<td class="${isShort ? "muted" : ""}">${esc(v)}</td>`;
+      }).join("");
+      return `<tr>${tds}</tr>`;
+    }).join("");
+
+    metaEl.textContent = `${rows.length} строк`;
+  }
+
+  function applySearch(){
+    const s = qEl.value.trim().toLowerCase();
+    if(!s){
+      renderRows(allRows);
+      return;
+    }
+    const filtered = allRows.filter(r =>
+      r.some(cell => String(cell || "").toLowerCase().includes(s))
+    );
+    renderRows(filtered);
+  }
+
+  function showError(msg){
+    loadingEl.style.display = "none";
+    errorEl.style.display = "block";
+    errorEl.textContent = msg;
+  }
+
+  // --- load ----------------------------------------------------------------
+
+  async function load(){
+    const sheetUrl = qs("sheet") || DEFAULT_SHEET_URL;
+    sourceNote.textContent = `Источник: ${sheetUrl}`;
+
+    const url = gvizUrl(sheetUrl);
+    if(!url){
+      showError("Не удалось извлечь ID таблицы из ссылки.");
+      return;
+    }
+
+    try{
+      const res = await fetch(url, { cache: "no-store" });
+      const text = await res.text();
+      const gviz = parseGviz(text);
+
+      const table = gviz.table;
+      const cols = (table.cols || []).map(c => c.label || c.id || "");
+      const rows = (table.rows || []).map(r => (r.c || []).map(cellVal));
+
+      // Уберём полностью пустые строки
+      const cleaned = rows.filter(r => r.some(x => String(x || "").trim() !== ""));
+
+      headers = cols;
+      allRows = cleaned;
+
+      renderHeaders(headers);
+      renderRows(allRows);
+
+      loadingEl.style.display = "none";
+    } catch(e){
+      showError(
+        "Не удалось загрузить данные. Скорее всего таблица не опубликована. " +
+        "Сделай File → Share → Publish to the web → Publish. " +
+        "Детали: " + (e?.message || e)
+      );
+    }
+  }
+
+  qEl.addEventListener("input", applySearch);
+  load();
+</script>
+</body>
+</html>
