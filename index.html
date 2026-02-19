@@ -1,641 +1,264 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Одобрения ВНЖ — кейсы участников</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Таблица — GitHub Pages</title>
+
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'IBM Plex Sans',sans-serif;background:#0f1117;color:#e8eaf0;min-height:100vh;padding:28px 22px 60px}
+  header{max-width:1200px;margin:0 auto 18px;border-bottom:1px solid #2a2d3a;padding-bottom:16px}
+  .tag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#4ade80;letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px}
+  h1{font-size:22px;font-weight:600;color:#f0f2f8;line-height:1.2}
+  .sub{margin-top:8px;font-size:13px;color:#7a7f94;font-weight:300;line-height:1.45}
 
-  body {
-    font-family: 'IBM Plex Sans', sans-serif;
-    background: #0f1117;
-    color: #e8eaf0;
-    min-height: 100vh;
-    padding: 32px 24px 64px;
-  }
-
-  header {
-    max-width: 1200px;
-    margin: 0 auto 22px;
-    border-bottom: 1px solid #2a2d3a;
-    padding-bottom: 18px;
-  }
-
-  .tag-line {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    color: #4ade80;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-  }
-
-  h1 {
-    font-size: 28px;
-    font-weight: 600;
-    color: #f0f2f8;
-    line-height: 1.2;
-  }
-
-  .subtitle {
-    margin-top: 8px;
-    font-size: 14px;
-    color: #7a7f94;
-    font-weight: 300;
-    line-height: 1.45;
-  }
-
-  .stats {
-    margin-top: 16px;
-    display: flex;
-    gap: 24px;
-    flex-wrap: wrap;
-  }
-
-  .stat {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    color: #9ca3af;
-  }
-
-  .stat-num {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 20px;
-    font-weight: 600;
-    color: #60a5fa;
-  }
-
-  /* Search + source */
-  .topbar {
-    max-width: 1200px;
-    margin: 0 auto 14px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-
-  .search {
-    flex: 1;
-    min-width: 240px;
-  }
-
+  .controls{max-width:1200px;margin:14px auto 14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .pill{padding:6px 10px;border-radius:999px;border:1px solid #2a2d3a;background:#181b26;color:#9ca3af;font-size:12px;font-family:'IBM Plex Mono',monospace}
+  .search{flex:1;min-width:240px}
   input[type="search"]{
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 12px;
-    border: 1px solid #2a2d3a;
-    background: #181b26;
-    color: #e8eaf0;
-    outline: none;
-    font-size: 13px;
+    width:100%;padding:10px 12px;border-radius:12px;border:1px solid #2a2d3a;background:#181b26;color:#e8eaf0;
+    outline:none;font-size:13px
   }
-  input[type="search"]::placeholder{ color:#6b7280; }
+  input[type="search"]::placeholder{color:#6b7280}
 
-  .source {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    color: #6b7280;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 520px;
+  .table-wrap{max-width:1200px;margin:0 auto;overflow:auto;border-radius:12px;border:1px solid #1e2130}
+  table{width:100%;border-collapse:collapse;font-size:13px;min-width:900px}
+  thead{background:#141722;position:sticky;top:0;z-index:10}
+  th{
+    padding:12px 14px;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#4b5563;
+    text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid #1e2130;white-space:nowrap
   }
+  td{padding:12px 14px;vertical-align:top;line-height:1.5;color:#cbd5e1;border-bottom:1px solid #181b26}
+  tbody tr:hover{background:#161925}
+  tbody tr:last-child td{border-bottom:none}
 
-  /* Filters */
-  .filters {
-    max-width: 1200px;
-    margin: 0 auto 20px;
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    align-items: center;
+  .muted{color:#6b7280;font-family:'IBM Plex Mono',monospace;font-size:12px;white-space:nowrap}
+  .link a{
+    color:#3b82f6;text-decoration:none;font-family:'IBM Plex Mono',monospace;font-size:11px;
+    padding:4px 8px;border:1px solid #1d3a5f;border-radius:8px;background:#111827;display:inline-flex;gap:6px;align-items:center
   }
-
-  .filter-label {
-    font-size: 12px;
-    color: #6b7280;
-    font-family: 'IBM Plex Mono', monospace;
-  }
-
-  .filter-btn {
-    padding: 5px 12px;
-    border-radius: 20px;
-    border: 1px solid #2a2d3a;
-    background: #181b26;
-    color: #9ca3af;
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.15s;
-    font-family: 'IBM Plex Sans', sans-serif;
-    user-select: none;
-  }
-
-  .filter-btn:hover, .filter-btn.active {
-    border-color: #3b82f6;
-    color: #93c5fd;
-    background: #1e2a3a;
-  }
-
-  .filter-btn.active { background: #1e3a5f; }
-
-  /* Table container */
-  .table-wrap {
-    max-width: 1200px;
-    margin: 0 auto;
-    overflow-x: auto;
-    border-radius: 12px;
-    border: 1px solid #1e2130;
-  }
-
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  thead { background: #141722; position: sticky; top: 0; z-index: 10; }
-
-  th {
-    padding: 12px 16px;
-    text-align: left;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    font-weight: 600;
-    color: #4b5563;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    border-bottom: 1px solid #1e2130;
-    white-space: nowrap;
-  }
-
-  tbody tr { border-bottom: 1px solid #181b26; transition: background 0.1s; }
-  tbody tr:hover { background: #161925; }
-  tbody tr:last-child { border-bottom: none; }
-
-  td { padding: 12px 16px; vertical-align: top; line-height: 1.5; }
-
-  .td-date {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    color: #6b7280;
-    white-space: nowrap;
-  }
-
-  .td-author { font-weight: 500; color: #e2e8f0; white-space: nowrap; }
-
-  .badge {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 11px;
-    font-weight: 500;
-    margin: 1px 2px 1px 0;
-    white-space: nowrap;
-  }
-
-  .badge-nomad    { background: #1e3a5f; color: #93c5fd; border: 1px solid #1d4ed8; }
-  .badge-cp       { background: #1a3a2a; color: #6ee7b7; border: 1px solid #059669; }
-  .badge-startup  { background: #3a1a2a; color: #f9a8d4; border: 1px solid #be185d; }
-  .badge-student  { background: #2a2a1a; color: #fde68a; border: 1px solid #d97706; }
-  .badge-nolucr   { background: #2a1a3a; color: #c4b5fd; border: 1px solid #7c3aed; }
-  .badge-vks      { background: #1a2a3a; color: #7dd3fc; border: 1px solid #0369a1; }
-  .badge-arraigo  { background: #3a2a1a; color: #fdba74; border: 1px solid #c2410c; }
-  .badge-indep    { background: #1a3a3a; color: #67e8f9; border: 1px solid #0e7490; }
-
-  .annul-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 2px 8px;
-    background: #3a1a1a;
-    color: #f87171;
-    border: 1px solid #b91c1c;
-    border-radius: 4px;
-    font-size: 11px;
-    font-weight: 600;
-    white-space: nowrap;
-  }
-
-  .region-tag {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    color: #a78bfa;
-    background: #1e1a3a;
-    border: 1px solid #4c1d95;
-    border-radius: 4px;
-    padding: 2px 7px;
-    white-space: nowrap;
-  }
-
-  .region-unknown { color: #4b5563; font-size: 11px; font-style: italic; }
-
-  .td-text { max-width: 420px; color: #9ca3af; font-size: 12px; line-height: 1.6; }
-  .td-text .text-clamp {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .td-link a {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    color: #3b82f6;
-    text-decoration: none;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    padding: 4px 8px;
-    border: 1px solid #1d3a5f;
-    border-radius: 5px;
-    background: #111827;
-    white-space: nowrap;
-    transition: all 0.15s;
-  }
-
-  .td-link a:hover {
-    background: #1e2a3a;
-    border-color: #3b82f6;
-    color: #93c5fd;
-  }
-
-  .legend {
-    max-width: 1200px;
-    margin: 20px auto 0;
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-    padding: 12px 16px;
-    background: #141722;
-    border-radius: 8px;
-    border: 1px solid #1e2130;
-  }
-
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    color: #6b7280;
-  }
-
-  .loading {
-    max-width: 1200px;
-    margin: 10px auto 0;
-    color: #9ca3af;
-    font-size: 13px;
-  }
-
-  .error {
-    max-width: 1200px;
-    margin: 14px auto 0;
-    border: 1px solid #3a1a1a;
-    background: #141722;
-    padding: 12px 14px;
-    border-radius: 10px;
-    color: #fca5a5;
-    font-size: 13px;
-    line-height: 1.5;
-    display: none;
-  }
+  .link a:hover{background:#1e2a3a;border-color:#3b82f6;color:#93c5fd}
+  .loading{max-width:1200px;margin:10px auto 0;color:#9ca3af;font-size:13px}
+  .error{max-width:1200px;margin:14px auto 0;border:1px solid #3a1a1a;background:#141722;padding:12px 14px;border-radius:10px;color:#fca5a5;font-size:13px;line-height:1.5;display:none}
+  .note{max-width:1200px;margin:10px auto 0;color:#6b7280;font-size:12px;font-family:'IBM Plex Mono',monospace}
 </style>
 </head>
+
 <body>
-
 <header>
-  <div class="tag-line">▸ cuentapropianomads · личный опыт участников</div>
-  <h1>Одобрения ВНЖ — кейсы участников</h1>
-  <p class="subtitle">Данные берутся из Google Sheets. Фильтры и статистика — как в твоём “старом” шаблоне.</p>
-
-  <div class="stats">
-    <div class="stat"><span class="stat-num" id="total-count">0</span><span>кейсов</span></div>
-    <div class="stat"><span class="stat-num" id="annul-count">0</span><span>с аннулированием</span></div>
-    <div class="stat"><span class="stat-num" id="regions-count">0</span><span>регионов</span></div>
-  </div>
+  <div class="tag">▸ github pages · roman biakov</div>
+  <h1>
+  Статистика чата
+  <a href="https://t.me/cuentapropianomads"
+     target="_blank"
+     rel="noopener"
+     style="
+       margin-left:12px;
+       color:#3b82f6;
+       text-decoration:none;
+       font-family:'IBM Plex Mono',monospace;
+       font-size:13px;
+       padding:6px 10px;
+       border:1px solid #1d3a5f;
+       border-radius:8px;
+       background:#111827;
+       display:inline-flex;
+       gap:6px;
+       align-items:center;
+     "
+     onmouseover="this.style.background='#1e2a3a';this.style.borderColor='#3b82f6';this.style.color='#93c5fd';"
+     onmouseout="this.style.background='#111827';this.style.borderColor='#1d3a5f';this.style.color='#3b82f6';"
+  >
+    ↗ Cuenta propia for Nomads
+  </a>
+</h1>
 </header>
 
-<div class="topbar">
-  <div class="search"><input id="q" type="search" placeholder="Поиск по всем кейсам…" /></div>
-  <div class="source" id="source"></div>
+<div class="controls">
+  <div class="search"><input id="q" type="search" placeholder="Поиск по всем ячейкам…" /></div>
+  <div class="pill" id="meta">0 строк</div>
 </div>
 
-<div class="filters" id="filters">
-  <span class="filter-label">фильтр:</span>
-  <button class="filter-btn active" data-filter="all">Все</button>
-  <button class="filter-btn" data-filter="annul">⚠️ Аннулирование</button>
-  <button class="filter-btn" data-filter="nomad">Номад</button>
-  <button class="filter-btn" data-filter="cp">Cuenta Propia</button>
-  <button class="filter-btn" data-filter="startup">Стартап</button>
-  <button class="filter-btn" data-filter="tarragona">Таррагона</button>
-  <button class="filter-btn" data-filter="barcelona">Барселона</button>
-  <button class="filter-btn" data-filter="valencia">Валенсия</button>
-</div>
+<div class="note" id="sourceNote"></div>
 
 <div class="table-wrap">
-  <table id="main-table">
-    <thead>
-      <tr>
-        <th>Дата</th>
-        <th>Автор</th>
-        <th>Исходный ВНЖ</th>
-        <th>Аннул.</th>
-        <th>Регион</th>
-        <th>Суть кейса</th>
-        <th>Ссылка</th>
-      </tr>
-    </thead>
+  <table>
+    <thead><tr id="thead"></tr></thead>
     <tbody id="tbody"></tbody>
   </table>
 </div>
 
-<div class="loading" id="loading">Загрузка данных…</div>
 <div class="error" id="errorBox"></div>
 
-<div class="legend">
-  <span class="legend-item"><span class="badge badge-nomad">Номад</span> цифровой кочевник</span>
-  <span class="legend-item"><span class="badge badge-cp">Cuenta Propia</span> самозанятый</span>
-  <span class="legend-item"><span class="badge badge-startup">Стартап</span></span>
-  <span class="legend-item"><span class="badge badge-student">Студент</span></span>
-  <span class="legend-item"><span class="badge badge-arraigo">Оседлость</span> arraigo</span>
-  <span class="legend-item"><span class="badge badge-nolucr">No Lucrativa</span></span>
-  <span class="legend-item"><span class="badge badge-vks">ВКС</span> высококвалиф.</span>
-  <span class="legend-item"><span class="annul-badge">⚠️ да</span> ВНЖ был аннулирован</span>
-</div>
-
 <script>
-  // Можно переопределить через URL: ?sheet=<ссылка>
+  // ТВОЯ ТАБЛИЦА (можно заменить или передавать через ?sheet= )
   const DEFAULT_SHEET_URL =
     "https://docs.google.com/spreadsheets/d/11q7yn-4c-SDdmsXpAxawZJSjwlnWt2BXsZFtPWxXT50/edit?gid=0#gid=0";
 
-  // ===== Helpers =====
-  function qs(name) {
+  // --- utils ---------------------------------------------------------------
+
+  function qs(name){
     const u = new URL(window.location.href);
     return u.searchParams.get(name);
   }
 
-  function extractSpreadsheetId(url) {
+  function extractSpreadsheetId(url){
     const m = String(url).match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
     return m ? m[1] : null;
   }
 
-  function extractGid(url) {
+  function extractGid(url){
     const s = String(url);
     const m = s.match(/[?#&]gid=(\d+)/);
     return m ? m[1] : "0";
   }
 
-  function gvizJsonUrl(sheetUrl) {
+  // Google Visualization API JSON endpoint
+  function gvizUrl(sheetUrl){
     const id = extractSpreadsheetId(sheetUrl);
     const gid = extractGid(sheetUrl);
-    if (!id) return null;
+    if(!id) return null;
     return `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?gid=${encodeURIComponent(gid)}&tqx=out:json`;
   }
 
-  function parseGviz(text) {
+  function parseGviz(text){
     const start = text.indexOf("{");
     const end = text.lastIndexOf("}");
-    if (start < 0 || end < 0) throw new Error("Не удалось распарсить ответ Google (GViz).");
+    if(start < 0 || end < 0) throw new Error("GViz: ответ не похож на JSON. Проверь Publish to the web.");
     return JSON.parse(text.slice(start, end + 1));
   }
 
-  function cellVal(cell) {
-    if (!cell) return "";
-    if (cell.f !== undefined && cell.f !== null) return String(cell.f);
-    if (cell.v !== undefined && cell.v !== null) return String(cell.v);
+  function cellVal(cell){
+    if(!cell) return "";
+    if(cell.f !== undefined && cell.f !== null) return cell.f; // formatted
+    if(cell.v !== undefined && cell.v !== null) return cell.v;
     return "";
   }
 
-  function normalizeTag(s) {
-    return String(s || "")
-      .trim()
-      .toLowerCase()
-      .replace(/\s+/g, "_")
-      .replace(/[^\p{L}\p{N}_-]+/gu, "");
-  }
-
-  function safeText(val) {
-    return String(val ?? "").replace(/\s+/g, " ").trim();
-  }
-
-  function isYes(val) {
-    const s = String(val || "").trim().toLowerCase();
-    return ["да","yes","y","true","1","⚠️"].includes(s);
-  }
-
-  function escapeHtml(s) {
+  function esc(s){
     return String(s ?? "")
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
+      .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;").replaceAll("'","&#039;");
   }
 
-  function normalizeUrl(s) {
+  function looksLikeUrl(s){
+    const t = String(s || "").trim();
+    return /^https?:\/\//i.test(t) || /^t\.me\//i.test(t) || /^@/i.test(t);
+  }
+
+  function normalizeUrl(s){
     let t = String(s || "").trim();
-    if (/^t\.me\//i.test(t)) t = "https://" + t;
-    if (/^@/i.test(t)) t = "https://t.me/" + t.slice(1);
+    if(/^t\.me\//i.test(t)) t = "https://" + t;
+    if(/^@/i.test(t)) t = "https://t.me/" + t.slice(1);
     return t;
   }
 
-  function badgeFor(tag) {
-    const map = {
-      nomad:   { cls: "badge-nomad",   label: "Номад" },
-      cp:      { cls: "badge-cp",      label: "Cuenta Propia" },
-      startup: { cls: "badge-startup", label: "Стартап" },
-      student: { cls: "badge-student", label: "Студент" },
-      nolucr:  { cls: "badge-nolucr",  label: "No Lucrativa" },
-      vks:     { cls: "badge-vks",     label: "ВКС" },
-      arraigo: { cls: "badge-arraigo", label: "Оседлость" },
-      indep:   { cls: "badge-indep",   label: "Независимый" },
-    };
-    return map[tag] || null;
+  // --- render --------------------------------------------------------------
+
+  const theadEl = document.getElementById("thead");
+  const tbodyEl = document.getElementById("tbody");
+  const loadingEl = document.getElementById("loading");
+  const errorEl = document.getElementById("errorBox");
+  const metaEl = document.getElementById("meta");
+  const sourceNote = document.getElementById("sourceNote");
+  const qEl = document.getElementById("q");
+
+  let headers = [];
+  let allRows = []; // array of array strings
+
+  function renderHeaders(cols){
+    theadEl.innerHTML = cols.map(h => `<th>${esc(h || "")}</th>`).join("");
   }
 
-  function autoTagsFromVisa(text) {
-    const s = String(text || "");
-    const out = new Set();
+  function renderRows(rows){
+    tbodyEl.innerHTML = rows.map(r => {
+      const tds = r.map(cell => {
+        const v = String(cell ?? "");
+        if(looksLikeUrl(v)){
+          const href = normalizeUrl(v);
+          const label = href.length > 42 ? (href.slice(0, 39) + "…") : href;
+          // return `<td class="link"><a href="${esc(href)}" target="_blank" rel="noopener">↗ ${esc(label)}</a></td>`;
+          return `
+<td class="link">
+  <a href="${esc(href)}" target="_blank" rel="noopener" title="Открыть Telegram">
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M21.944 2.506a1 1 0 0 0-1.09-.163L2.6 9.21a1 1 0 0 0 .064 1.88l4.89 1.63 1.63 4.89a1 1 0 0 0 1.88.064l6.867-18.255a1 1 0 0 0-.987-1.413zM9.94 13.06l-.94 2.82-.94-2.82 8.23-6.27-6.35 7.27z"/>
+    </svg>
+    <span style="font-size:11px;margin-left:4px;">TG</span>
+  </a>
+</td>
+`;
+        }
+        // дату/короткие штуки можно подсветить моноширинным
+        const isShort = v.length <= 18 && /^[0-9.\-\/ :()]+$/.test(v);
+        return `<td class="${isShort ? "muted" : ""}">${esc(v)}</td>`;
+      }).join("");
+      return `<tr>${tds}</tr>`;
+    }).join("");
 
-    if (/nomad|номад|digital\s*nomad/i.test(s)) out.add("nomad");
-    if (/cuenta\s*propia|cuenta\s*ajena|cuenta|куэнта|cuenta\s*prop/i.test(s)) out.add("cp");
-    if (/startup|стартап/i.test(s)) out.add("startup");
-    if (/student|студ/i.test(s)) out.add("student");
-    if (/no\s*lucr|lucrativa/i.test(s)) out.add("nolucr");
-    if (/arraigo|оседл/i.test(s)) out.add("arraigo");
-    if (/вкс|highly|alta\s*cual/i.test(s)) out.add("vks");
-    if (/indep|независ/i.test(s)) out.add("indep");
-
-    return out;
+    metaEl.textContent = `${rows.length} строк`;
   }
 
-  function renderBadges(tags) {
-    const order = ["nomad","cp","startup","student","arraigo","nolucr","vks","indep"];
-    const parts = [];
-    for (const t of order) {
-      if (tags.has(t)) {
-        const b = badgeFor(t);
-        if (b) parts.push(`<span class="badge ${b.cls}">${escapeHtml(b.label)}</span>`);
-      }
+  function applySearch(){
+    const s = qEl.value.trim().toLowerCase();
+    if(!s){
+      renderRows(allRows);
+      return;
     }
-    return parts.join("");
+    const filtered = allRows.filter(r =>
+      r.some(cell => String(cell || "").toLowerCase().includes(s))
+    );
+    renderRows(filtered);
   }
 
-  function renderRegion(region) {
-    const r = safeText(region);
-    if (!r) return `<span class="region-unknown">не указан</span>`;
-    return `<span class="region-tag">${escapeHtml(r)}</span>`;
+  function showError(msg){
+    loadingEl.style.display = "none";
+    errorEl.style.display = "block";
+    errorEl.textContent = msg;
   }
 
-  function renderLink(link) {
-    const l = safeText(link);
-    if (!l) return "";
-    const href = normalizeUrl(l);
-    const label = href.includes("t.me/") ? href.replace(/^https?:\/\/t\.me\//, "/") : (href.length > 24 ? href.slice(0, 21) + "…" : href);
-    return `<a href="${escapeHtml(href)}" target="_blank" rel="noopener">↗ ${escapeHtml(label)}</a>`;
-  }
+  // --- load ----------------------------------------------------------------
 
-  // ===== State =====
-  let allItems = [];
-  let currentFilter = "all";
+  async function load(){
 
-  function matchesFilter(item, filter) {
-    if (filter === "all") return true;
-    if (filter === "annul") return item.annul;
-
-    // tag filters
-    return item.tags.has(filter);
-  }
-
-  function matchesSearch(item, query) {
-    if (!query) return true;
-    const hay = [
-      item.date, item.author, item.region, item.visa, item.text, item.link
-    ].join(" ").toLowerCase();
-    return hay.includes(query);
-  }
-
-  function updateStats(visibleItems) {
-    document.getElementById("total-count").textContent = visibleItems.length;
-
-    const annulCount = allItems.filter(x => x.annul).length;
-    document.getElementById("annul-count").textContent = annulCount;
-
-    const regions = new Set(allItems.map(x => normalizeTag(x.region)).filter(Boolean));
-    document.getElementById("regions-count").textContent = regions.size;
-  }
-
-  function renderTable(visibleItems) {
-    const tbody = document.getElementById("tbody");
-    tbody.innerHTML = visibleItems.map(it => `
-      <tr data-tags="${escapeHtml([...it.tags].join(" "))}">
-        <td class="td-date">${escapeHtml(it.date)}</td>
-        <td class="td-author">${escapeHtml(it.author)}</td>
-        <td>${renderBadges(it.tags)}</td>
-        <td>${it.annul ? `<span class="annul-badge">⚠️ да</span>` : ""}</td>
-        <td>${renderRegion(it.region)}</td>
-        <td class="td-text"><div class="text-clamp">${escapeHtml(it.text)}</div></td>
-        <td class="td-link">${renderLink(it.link)}</td>
-      </tr>
-    `).join("");
-  }
-
-  function applyUI() {
-    const q = document.getElementById("q").value.trim().toLowerCase();
-
-    const visible = allItems
-      .filter(it => matchesFilter(it, currentFilter))
-      .filter(it => matchesSearch(it, q));
-
-    renderTable(visible);
-    updateStats(visible);
-  }
-
-  function setActiveFilter(filter) {
-    currentFilter = filter;
-    document.querySelectorAll(".filter-btn").forEach(b => b.classList.toggle("active", b.dataset.filter === filter));
-    applyUI();
-  }
-
-  // ===== Load data =====
-  async function load() {
-    const sheetUrl = qs("sheet") || DEFAULT_SHEET_URL;
-    document.getElementById("source").textContent = `Источник: ${sheetUrl}`;
-
-    const url = gvizJsonUrl(sheetUrl);
-    if (!url) {
-      showError("Не могу извлечь ID таблицы из ссылки.");
+    const url = gvizUrl(sheetUrl);
+    if(!url){
+      showError("Не удалось извлечь ID таблицы из ссылки.");
       return;
     }
 
-    try {
+    try{
       const res = await fetch(url, { cache: "no-store" });
       const text = await res.text();
       const gviz = parseGviz(text);
 
       const table = gviz.table;
-      const headers = (table.cols || []).map(c => (c.label || c.id || "").trim());
-      const headerMap = new Map(headers.map((h, i) => [normalizeTag(h), i]));
+      const cols = (table.cols || []).map(c => c.label || c.id || "");
+      const rows = (table.rows || []).map(r => (r.c || []).map(cellVal));
 
-      function pick(row, keys) {
-        for (const k of keys) {
-          const idx = headerMap.get(k);
-          if (idx !== undefined) return row[idx] || "";
-        }
-        return "";
-      }
+      // Уберём полностью пустые строки
+      const cleaned = rows.filter(r => r.some(x => String(x || "").trim() !== ""));
 
-      const rows = (table.rows || [])
-        .map(r => (r.c || []).map(cellVal))
-        .filter(r => r.some(x => String(x || "").trim() !== ""));
+      headers = cols;
+      allRows = cleaned;
 
-      // Под твою текущую структуру (как ты показывал раньше):
-      // Дата, Автор, Исходный ВНЖ, Аннулирование, Регион, Детали/Причина, Ссылка в TG
-      allItems = rows.map(r => {
-        const date = safeText(pick(r, ["дата","date"]));
-        const author = safeText(pick(r, ["автор","author","ник","name"]));
-        const visa = safeText(pick(r, ["исходный_внж","внж","тип","permit","статус"]));
-        const annulRaw = safeText(pick(r, ["аннулирование","аннул","аннулировано","annul"]));
-        const region = safeText(pick(r, ["регион","город","region","provincia","province"]));
-        const text = safeText(pick(r, ["детали_причина","детали","причина","суть","описание","кейс","text","комментарий"]));
-        const link = safeText(pick(r, ["ссылка_в_tg","ссылка","линк","url","link"]));
+      renderHeaders(headers);
+      renderRows(allRows);
 
-        const tags = new Set();
-        autoTagsFromVisa(visa).forEach(t => tags.add(t));
-
-        const regTag = normalizeTag(region);
-        if (regTag) tags.add(regTag);
-
-        const annul = isYes(annulRaw);
-        if (annul) tags.add("annul");
-
-        return { date, author, visa, annul, region, text, link, tags };
-      });
-
-      document.getElementById("loading").style.display = "none";
-
-      // Filters
-      document.getElementById("filters").addEventListener("click", (e) => {
-        const btn = e.target.closest(".filter-btn");
-        if (!btn) return;
-        setActiveFilter(btn.dataset.filter);
-      });
-
-      // Search
-      document.getElementById("q").addEventListener("input", applyUI);
-
-      setActiveFilter("all");
-    } catch (err) {
-      showError("Ошибка загрузки. Проверь доступ/публикацию таблицы (Publish to the web). Детали: " + (err?.message || err));
+      loadingEl.style.display = "none";
+    } catch(e){
+      showError(
+        "Не удалось загрузить данные. Скорее всего таблица не опубликована. " +
+        "Сделай File → Share → Publish to the web → Publish. " +
+        "Детали: " + (e?.message || e)
+      );
     }
   }
 
-  function showError(msg) {
-    document.getElementById("loading").style.display = "none";
-    const box = document.getElementById("errorBox");
-    box.style.display = "block";
-    box.textContent = msg;
-  }
-
+  qEl.addEventListener("input", applySearch);
   load();
 </script>
 </body>
