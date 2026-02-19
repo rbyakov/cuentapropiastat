@@ -213,7 +213,7 @@
   // --- load ----------------------------------------------------------------
 
   async function load(){
-
+    const sheetUrl = qs("sheet") || DEFAULT_SHEET_URL;
     const url = gvizUrl(sheetUrl);
     if(!url){
       showError("Не удалось извлечь ID таблицы из ссылки.");
